@@ -20,4 +20,4 @@ When uncertain, prefer: Python
 - Prefer first-party/primary sources. If a claim rests on a secondary or tertiary source, verify it against the original before relying on it.
 
 ## Working Style
-- If you don't know something, or you're acting on an assumption, say so explicitly at the point it matters — don't silently proceed, and don't wait to be asked. Flag it so I can steer early, rather than losing hours down a path that was never going to work.
+- If you don't know something, or you're acting on an assumption, say so explicitly at the point it matters - don't silently proceed, and don't wait to be asked. Flag it so I can steer early, rather than losing hours down a path that was never going to work.
