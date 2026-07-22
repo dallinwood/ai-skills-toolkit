@@ -1,0 +1,14 @@
+{
+  "name": "ai-skills-toolkit",
+  "description": "Personal Claude Code skills marketplace.",
+  "owner": {
+    "name": "dallinwood"
+  },
+  "plugins": [
+    {
+      "name": "ai-skills-toolkit",
+      "source": "./",
+      "description": "Personal Claude Code skills, kept in sync across every machine."
+    }
+  ]
+}
