@@ -24,8 +24,14 @@ Claude Code also refreshes marketplaces in the background on startup, so install
 
 ## Adding a skill
 
-Drop a new directory under [skills/](skills/) — see [skills/README.md](skills/README.md) for the layout. Commands go under `commands/`, subagents under `agents/`; both are auto-discovered the same way. Commit and push; every installed device picks it up on the next update.
+Drop a new directory under [skills/](skills/) — see [skills/README.md](skills/README.md) for the layout. Subagents go under `agents/`, auto-discovered the same way. Commit and push; every installed device picks it up on the next update.
 
 ## Official Anthropic plugins
 
-`/ai-skills-toolkit:install-official-plugins` installs the official `claude-plugins-official` plugins this setup depends on ([commands/install-official-plugins.md](commands/install-official-plugins.md)). It's a deliberate, on-demand command rather than an automatic dependency — running it won't touch anything you haven't asked for. To onboard a new official plugin, add its name to the list in that file and re-run the command.
+`/ai-skills-toolkit:install-official-plugins` installs the official `claude-plugins-official` plugins this setup depends on ([skills/install-official-plugins/SKILL.md](skills/install-official-plugins/SKILL.md)). It's set to manual-invocation only, so Claude won't run it on its own — running it won't touch anything you haven't asked for. To onboard a new official plugin, add its name to the list in that file and re-run the skill.
+
+## Global CLAUDE.md
+
+[skills/sync-claude-md/CLAUDE.md](skills/sync-claude-md/CLAUDE.md) is the tracked, canonical copy of the global `~/.claude/CLAUDE.md`. Run `/ai-skills-toolkit:sync-claude-md` on any machine to pull the latest tracked copy down onto that machine ([skills/sync-claude-md/SKILL.md](skills/sync-claude-md/SKILL.md)) — it updates the plugin first, diffs against the local file, and asks before overwriting anything. It's set to manual-invocation only, so Claude won't run it on its own.
+
+That skill only pulls. To publish a change: edit `skills/sync-claude-md/CLAUDE.md` in a git checkout of this repo, commit, and push — then run the sync skill on every other machine.

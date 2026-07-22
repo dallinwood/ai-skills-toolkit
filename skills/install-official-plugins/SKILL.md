@@ -1,5 +1,7 @@
 ---
-description: Install (or update) the maintained set of official claude-plugins-official plugins on this machine.
+name: install-official-plugins
+description: Install (or update) the maintained set of official claude-plugins-official plugins on this machine. Invoke only when the user explicitly asks to install, onboard, or sync the official plugins.
+disable-model-invocation: true
 allowed-tools: Bash(claude plugin marketplace add:*), Bash(claude plugin marketplace update:*), Bash(claude plugin install:*), Bash(claude plugin list:*)
 ---
 
@@ -10,7 +12,7 @@ Ensure the following plugins are installed from the `claude-plugins-official` ma
 - security-guidance
 - claude-md-management
 
-(To onboard a new official plugin later, add its name to this list and re-run this command — nothing else needs to change.)
+(To onboard a new official plugin later, add its name to this list and re-run this skill — nothing else needs to change.)
 
 Do this:
 
