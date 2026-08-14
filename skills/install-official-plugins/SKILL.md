@@ -11,6 +11,7 @@ Ensure the following plugins are installed from the `claude-plugins-official` ma
 - skill-creator
 - security-guidance
 - claude-md-management
+- superpowers
 
 (To onboard a new official plugin later, add its name to this list and re-run this skill — nothing else needs to change.)
 
