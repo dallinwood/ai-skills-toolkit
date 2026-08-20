@@ -24,3 +24,5 @@ Encode the real domain in a data structure instead of scattering it across condi
 Do not force an abstraction. Prefer boring code if the current shape is already clear, local, and unlikely to grow. Be skeptical of an abstraction that adds indirection without removing branches, duplicated rules, invalid states, or lifecycle risk.
 
 The tell that you skipped this is a new feature that grows an existing if/else chain by one more branch, or a second boolean that must stay in sync with the first. Temporal decomposition is another tell. Phase-named modules repeat the same domain rules across steps.
+
+See **principle-type-system-discipline** for how to encode the chosen structure in a typed language once you've picked it.

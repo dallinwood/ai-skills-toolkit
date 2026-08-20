@@ -97,7 +97,7 @@ Capture this as seed context (file paths, symbols, commits, PR numbers, linked t
 
 ### Discovery
 
-Before spawning investigators, list the available MCPs from the Cursor environment. Use the available-tools map when present. Otherwise inspect the `mcps/` directory Cursor exposes for enabled MCP servers.
+Before spawning investigators, find the available MCPs for this session: check the system-reminder listing of connected MCP servers, and use `ToolSearch` to locate MCP-backed tools that match each evidence category below.
 
 Map each available MCP to one evidence category:
 
@@ -116,9 +116,8 @@ Aim for a complete **coverage map**, not a minimal one. A null result from an is
 Launch all matching investigators in a single message so they run concurrently. One investigator per category lets each specialize in one tool's query vocabulary and result shape. Don't ask one agent to cover multiple MCPs.
 
 Subagent config (each):
-- `subagent_type`: `generalPurpose`
-- `model`: your configured why-investigators model (default `grok-4.6-fast-xhigh`)
-- `readonly`: `false` (agent mode). **Do not use readonly/Ask mode.** It strips MCP access, which disables MCP-backed investigators entirely. The source control investigator would be safe in readonly, but keep modes uniform. Investigators still shouldn't write anything. That's a posture, not a sandbox.
+- `subagent_type`: `general-purpose`
+- Omit the `model` param. The agent inherits this session's model, and needs full tool access (including MCP-backed tools) rather than a restricted read-only mode. Investigators still shouldn't write anything. That's a posture, not a sandbox, so say so in the prompt rather than relying on a tool restriction.
 
 Each investigator gets:
 1. The base prompt from `references/investigator-prompt.md`
@@ -162,9 +161,8 @@ If your scope assessment suggests a single-commit trivial target where the PR de
 
 Spawn one synthesizer subagent:
 
-- `subagent_type`: `generalPurpose`
-- `model`: your configured why-synthesizer model (default `claude-fable-5-thinking-max`)
-- `readonly`: `false` (agent mode). The synthesizer's quality check spot-verifies citations, which can require MCP access. Readonly/Ask mode strips MCPs and defeats that.
+- `subagent_type`: `general-purpose`
+- Omit the `model` param. The agent inherits this session's model, and needs full tool access since its quality check spot-verifies citations, which can require MCP access.
 
 The synthesizer gets:
 1. The investigator findings, including any null results and any categories skipped with justification
@@ -178,6 +176,8 @@ Its job is the final output: a confidence-weighted, evidence-cited narrative wit
 ## Step 5. Present
 
 Take the synthesizer's output and present it to the user. You may lightly edit for clarity or add context from the conversation, but **do not rewrite the confidence language**. The epistemic framing is the product. Dropping the hedges to sound more authoritative is the exact failure mode this skill exists to prevent.
+
+If the user's `why` question is a precursor to actually changing this code, this is also where you add the **Preserve / Change / Avoid / Risk** block described in Output Format below: it's your addition as the presenting lead, not something the synthesizer produces.
 
 ## Output Format
 
@@ -208,7 +208,7 @@ Example:
 - Error / exception tracking (Sentry): searched for issues first-seen in Aug 2024 with stack through `retry.ts`. Found issue SENTRY-3821 spiking in the week before the PR.
 - Product analytics warehouse (Databricks): queried `<your_analytics_db>.<schema>.stg_backend_upstream_retry` for the 30-day window around 2024-08-14. Daily failure-classified event count fell from ~1.2k/day pre-PR to <50/day post-PR. Also checked `system.query.history` for relevant migration queries. None found.
 
-After the Sources Consulted block, if the user's `why` question is a precursor to actually changing this code, convert the lineage findings into a Preserve / Change / Avoid / Risk constraint set suitable for planning the change.
+**Preserve / Change / Avoid / Risk** (optional, lead-added). Not part of the synthesizer's output. After the Sources Consulted block, if the user's `why` question is a precursor to actually changing this code, you as the presenting lead (Step 5) convert the synthesizer's lineage findings into this constraint set before handing the answer back.
 
 ## Common Failure Modes to Avoid
 

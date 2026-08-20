@@ -14,6 +14,12 @@ You are reviewing the architecture of a codebase subsystem. An explanation of ho
 
 {FILE_PATHS}
 
+## Assigned Lens
+
+{ASSIGNED_LENS_NAMES}
+
+Review through this lens (or lenses) specifically. The rubric excerpt below covers only your assigned section(s) of `critique-rubric.md`.
+
 ## Critique Rubric
 
 {CRITIQUE_RUBRIC_CONTENTS}

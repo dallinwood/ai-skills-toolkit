@@ -44,9 +44,9 @@ The right decomposition depends on the question. Use your judgment. Narrow quest
 
 Spawn all explorers in a single message:
 
-- `subagent_type`: `generalPurpose`
-- `model`: your configured how-explorer model (default `grok-4.6-fast-xhigh`)
-- `readonly`: `true`
+- `subagent_type`: `general-purpose`
+- Omit the `model` param. The agent inherits this session's model.
+- In the prompt, state plainly: this is a read-only investigation, do not edit or write any files.
 
 Each explorer gets the same base prompt from `references/explorer-prompt.md` plus a specific exploration angle naming its slice. Each explorer should:
 - Start broad: Glob for relevant directories, Grep for key types/interfaces/class names
@@ -63,9 +63,9 @@ Then proceed to Step 3.
 
 Spawn a single Task subagent that explores and explains in one pass:
 
-- `subagent_type`: `generalPurpose`
-- `model`: your configured how-explainer model (default `claude-fable-5-thinking-max`)
-- `readonly`: `true`
+- `subagent_type`: `general-purpose`
+- Omit the `model` param. The agent inherits this session's model.
+- In the prompt, state plainly: this is a read-only investigation, do not edit or write any files.
 
 The agent does its own exploration (Glob, Grep, Read) and writes the explanation directly. Read `references/explainer-prompt.md` for the communication style and output format. Same structure, just no explorer findings as input.
 
@@ -75,9 +75,9 @@ Proceed to Step 4.
 
 Once all explorers return, spawn a single Task subagent to synthesize their findings into one coherent explanation:
 
-- `subagent_type`: `generalPurpose`
-- `model`: your configured how-explainer model (default `claude-fable-5-thinking-max`)
-- `readonly`: `true`
+- `subagent_type`: `general-purpose`
+- Omit the `model` param. The agent inherits this session's model.
+- In the prompt, state plainly: this is a read-only investigation, do not edit or write any files.
 
 The explainer gets all explorers' findings and writes the human-facing explanation (output format below). Read `references/explainer-prompt.md` for the full prompt template. The explainer reconciles overlapping findings, resolves contradictions, and weaves the slices into a unified picture.
 
@@ -109,21 +109,25 @@ Run the full explain flow above (Steps 1-4). You must understand the architectur
 
 ### Step 2. Spawn Critics
 
-After the explanation is complete, spawn one architectural critic per model in your configured how-critics list (defaults `claude-fable-5-thinking-max`, `gpt-5.6-sol-max`, `grok-4.6-fast-xhigh`, `claude-opus-5-thinking-xhigh`), all in a single message.
+After the explanation is complete, spawn one architectural critic per lens group below, all in a single message, all on the same inherited session model. Group `references/critique-rubric.md`'s six lenses into critics so each gets one or two related lenses:
+- Abstraction Fit + Data Model
+- Boundary Discipline
+- Evolution Readiness + Complexity vs. Value
+- Consistency
 
 For each critic:
-- `subagent_type`: `generalPurpose`
-- `model`: one model from the configured how-critics list. These are minimum reasoning levels. The lead should escalate any model when the architecture warrants deeper analysis.
-- `readonly`: `true`
+- `subagent_type`: `general-purpose`
+- Omit the `model` param so the agent inherits this session's model, except set `model` to a stronger tier (e.g. `opus`) for a critic, or add an additional critic lens, when the subsystem touches shared mutable state, a public API, or has caused a prior incident.
+- In the prompt, state plainly: this is a read-only investigation, do not edit or write any files.
 
 Read `references/critic-prompt.md` for the prompt template. Each critic gets:
 1. The explanation from Step 1 (so they don't re-explore)
 2. The relevant file paths (so they can read the actual code)
-3. The architectural critique rubric from `references/critique-rubric.md`
+3. Only the rubric section(s) matching their assigned lens(es) from `references/critique-rubric.md`, not the whole rubric
 
 ### Step 3. Lead Judgment
 
-Same framework as the interrogate skill. You're a pragmatic lead, not an aggregator.
+You're a pragmatic lead, not an aggregator.
 
 Categorize findings:
 - **Act on.** Architectural problems worth fixing now

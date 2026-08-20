@@ -21,3 +21,5 @@ Maintainability is the work a reader must do to understand code. Track two axes:
 - Before adding a layer or a piece of state, ask: does this reduce reader load somewhere else by at least as much?
 
 **The test:** Can a new reader answer "where does X come from?" and "what can change X?" in under 30 seconds? If not, cut layers or cut state.
+
+See also **principle-laziness-protocol**, which shares this flat-call-hierarchy goal as one piece of a broader bias toward deletion and smaller diffs.

@@ -11,9 +11,9 @@ Place validation, type narrowing, and error handling at system boundaries. Trust
 **Why:** Scattered validation is noisy, redundant, and gives a false sense of safety. Validate data once at the boundary. Keep logic out of framework wiring so it can be tested without the framework.
 
 **The pattern:**
-- **At boundaries** (CLI args, config files, external APIs, network protocols): validate, return errors, handle defensively.
-- **Inside the system:** typed data, error propagation, no re-validation. Trust the types.
-- **Across the boundary.** Expose domain concepts, not the boundary's private representation. Keep general-purpose mechanism inside and special-purpose policy at the edge.
+- **At the boundary** (CLI args, config files, external APIs, network protocols): validate, return errors, handle defensively.
+- **Inside the system** (everything past the boundary): trust the types, propagate errors, never re-validate.
+- **Across the boundary** (the shape that crosses it): expose domain concepts, not the boundary's private representation; keep general-purpose mechanism inside, special-purpose policy at the edge.
 
 **Applications:**
 
